@@ -26,7 +26,7 @@ cd server && npm install
 Open a terminal on server directory
 
 ```
-nodemon app
+npm run dev
 ```
 
 and open another terminal on client directory
