@@ -45,7 +45,7 @@ const HomeComponent = () => {
         else if (commandData.command === 'Cart') {
           // cartModalOpen();
         }
-        else if(commandData.command === 'DashboardAdmin') {
+        else if (commandData.command === 'DashboardAdmin') {
           history.push("/admin/dashboard");
         }
       }
