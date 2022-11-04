@@ -7,7 +7,6 @@ import SingleProduct from "./SingleProduct";
 import alanBtn from '@alan-ai/alan-sdk-web';
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
-import { CartModal } from "../partials";
 
 export const HomeContext = createContext();
 
@@ -16,12 +15,19 @@ const HomeComponent = () => {
   const history = useHistory();
 
   useEffect(() => {
+    function sendCategory() {
+      alanBtnInstance.activate();
+      // Calling the project API method on button click
+      alanBtnInstance.callProjectApi("listCategories", {
+        categories: 'Electronics, Fashion, Home and Garden, Sports, Health and Beauty, Collectibles and Art Products',
+      }, function(error, result) {});
+    };
+    
     var alanBtnInstance = alanBtn({
       //key: 'd22e60a51299e6155cfe9d61365910e42e956eca572e1d8b807a3e2338fdd0dc/stage',
       key: '8a0d8107f8d57720e65cb7dbd8f921da2e956eca572e1d8b807a3e2338fdd0dc/stage',
       onCommand: (commandData) => {
-        if (commandData.command === 'gohomePage') {
-          // Call the client code that will react to the received command1
+        if (commandData.command === 'Cart') {
           // Navber.cartModalOpen();
         }
         else if (commandData.command === "Wishlist") {
@@ -42,11 +48,20 @@ const HomeComponent = () => {
         else if (commandData.command === "ContactUs") {
           history.push("/contact-us");
         }
-        else if (commandData.command === 'Cart') {
-          // cartModalOpen();
-        }
         else if (commandData.command === 'DashboardAdmin') {
           history.push("/admin/dashboard");
+        }
+        else if (commandData.command === 'Categories') {
+          history.push("/admin/dashboard/categories")
+        }
+        else if (commandData.command === 'Products') {
+          history.push("/admin/dashboard/products")
+        }
+        else if (commandData.command === 'Orders') {
+          history.push("/admin/dashboard/orders")
+        }
+        else if(commandData.command === 'ListCategories') {
+          sendCategory();
         }
       }
     });
