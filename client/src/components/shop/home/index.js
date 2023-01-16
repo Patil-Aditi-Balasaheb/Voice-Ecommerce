@@ -63,6 +63,24 @@ const HomeComponent = () => {
         else if(commandData.command === 'ListCategories') {
           sendCategory();
         }
+        else if(commandData.command === 'Electronics') {
+          history.push("/products/category/634b130eb5966b04d490e0a5");
+        }
+        else if(commandData.command === 'Fashion') {
+          history.push("/products/category/634b149ab5966b04d490e0c8");
+        }
+        else if(commandData.command === 'HomenGarden') {
+          history.push("/products/category/634b15d2b5966b04d490e0cc");
+        }
+        else if(commandData.command === 'Sports') {
+          history.push("/products/category/635216b8fea69c47a46fc014");
+        }
+        else if(commandData.command === 'HealthnBeauty') {
+          history.push("/products/category/6352175afea69c47a46fc02f");
+        }
+        else if(commandData.command === 'Collectibles') {
+          history.push("/products/category/63521846fea69c47a46fc055");
+        }
       }
     });
   }, [history]);
