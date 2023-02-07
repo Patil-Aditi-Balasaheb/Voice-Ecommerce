@@ -1,0 +1,161 @@
+intent('hello alan', p => {
+    p.play('(Assalam|hi there)');
+});
+
+intent('(what|how) (do|can) you (do|help me)?', p => {
+    p.play('I listen to your commands and add or remove items from the cart');
+});
+
+intent('what (is|does) this (website|app) (about|do)?', p => {
+    p.play('This is a E-commerce website were you can shop items of your choice');
+});
+
+intent('(Go to my wishlist|open Wishlist)',(p)=>{
+    p.play({command:'Wishlist'}, p.play('Opening'));
+    p.play('here is your Wishlist.');
+})
+intent('(Go to login|open login page| login page)',(p)=>{
+    p.play({command:'Login'}, p.play('Opening Login page'));
+  
+})
+
+intent('(Go to|open|show) (my|) (account|dashboard)', (p) => {
+    p.play({command: 'UserProfile'}, p.play('Opening'));
+    p.play('here is your Account.');
+})
+
+intent('(Go to|open|show) (my|) orders', (p) => {
+    p.play({command: 'UserOrders'}, p.play('Opening'));
+    p.play('here are your Orders.');
+})
+
+intent('(Go to|open|show) settings', (p) => {
+    p.play({command: 'SettingUser'}, p.play('Opening'));
+    p.play('here is your Setting.');
+})
+
+intent('(Go to|open|show|Go back to) (home|shop) (page|)', (p) => {
+    p.play({command: 'Home'}, p.play('Opening'));
+    p.play('here is your Home page where you can shop.');
+})
+
+intent('(Go to|open|show|Go back to) (contact us|contact) (page|)', (p) => {
+    p.play({command: 'ContactUs'}, p.play('Opening'));
+    p.play('here is Contact us.');
+})
+
+intent('(Go to|open) admin (panel|dashboard)',(p)=>{
+    p.play({command:'DashboardAdmin'}, p.play('Opening'));
+    p.play('here is the Admin (Panel|Dashboard).');
+})
+
+intent('(Go to|open|show) (manage|all) categories',(p)=>{
+    p.play({command:'Categories'}, p.play('Opening'));
+    p.play('here is the manage categories page where you can add, remove or update one.');
+})
+
+intent('(Go to|open|show) (manage|all) products',(p)=>{
+    p.play({command:'Products'}, p.play('Opening'));
+    p.play('here is the manage products page where you can add, remove or update one.');
+})
+
+intent('(Go to|open|show) (manage|all) orders',(p)=>{
+    p.play({command:'Orders'}, p.play('Opening'));
+    p.play('here is the manage orders page where you can update the order status.');
+})
+
+projectAPI.listCategories = function(p, param, callback) {
+    if (param) {
+        p.play(`We have, ${param.categories} which you can shop`);
+    } else {
+        p.play(`We don't have any category.`);
+    }
+    callback();
+};
+
+intent('(what|list) (can|all|) (I|categories) (get|buy|do you have?|) (here|)', p => {
+    p.play({command: 'ListCategories'});
+});
+
+// intent('(open|show) cart', (p) => {
+//     p.play({command: 'Cart'}, p.play('here is your Cart'));
+// })
+
+
+
+intent('(what categories do you have?|categories)', p => {
+    p.play('You can buy shoes, watches, clothes men and women ');
+});
+
+const items = "$(item__name shoe|skirt|sandal|shirt|short|pant|tvs)"
+
+intent(`(show me some|do you have) ${items}`,p=>{
+    p.play({command:"show",product:`${p.item_name.value}`},p.play( p.itemname.value==="shirt"?'see these shirts,they will look handsome on you':`look at these ${p.item_name.value}`))
+})
+intent('(Go to my wishlist|open Wishlist)',(p)=>{
+    p.play({command:'Wishlist'}, p.play('here is your Wishlist'));
+})
+intent('(Go to adminPanel | adminPanel)',(p)=>{
+    p.play({command:'adminPanel'}, p.play('Manage your orders'));
+ })
+intent('(go back to home page | let me buy something)',(p)=>{
+    p.play({command:'home'}, p.play('you are in the home page'))
+})
+intent('open cart',(p)=>{
+    p.play({command:'showCart'}, p.play('Manage your orders'));
+ })
+
+
+intent('(show some Electronics | Electronics) (products|)',(p)=>{
+    p.play({command:'Electronics'}, p.play('browse Electronics here'));
+ })
+intent('(show some Fashion | Fashion) (products|)',(p)=>{
+    p.play({command:'Fashion'}, p.play('browse Fashion products here'));
+ })
+intent('(show some Home and Garden | Home and Garden) (products|)',(p)=>{
+    p.play({command:'HomenGarden'}, p.play('browse Home and Garden products here'));
+ })
+intent('(show some Sports | Sports) (products|)',(p)=>{
+    p.play({command:'Sports'}, p.play('browse Sports products here'));
+ })
+intent('(show some Health and Beauty | Health and Beauty) (products|)',(p)=>{
+    p.play({command:'HealthnBeauty'}, p.play('browse Health and Beauty products here'));
+ })
+intent('(show some Collectibles and Art | Collectibles and Art) (products|)',(p)=>{
+    p.play({command:'Collectibles'}, p.play('browse Collectibles and Art products here'));
+ })
+
+
+
+
+// intent('(show some womenClothes | womenClothes)',(p)=>{
+//     p.play({command:'womenClothes'}, p.play('browse women Clothes here'));
+//  })
+// intent('(show some shoes | shoes)',(p)=>{
+//     p.play({command:'shoes'}, p.play('browse shoes here'));
+//  })
+// intent('(show some menClothes | menClothes)',(p)=>{
+//     p.play({command:'menClothes'}, p.play('browse men Clothes here'));
+//  })
+
+intent('open cart',(p)=>{
+    p.play({command:'showCart'}, p.play('Manage your orders'));
+ })
+// intent('show some watches',(p)=>{
+//     p.play({command:'watches'}, p.play('browse watches here'));
+//  })
+// intent('show some womenClothes',(p)=>{
+//     p.play({command:'womenClothes'}, p.play('browse women Clothes here'));
+//  })
+// intent('show some shoes',(p)=>{
+//     p.play({command:'shoes'}, p.play('browse shoes here'));
+//  })
+// intent('show some menClothes',(p)=>{
+//     p.play({command:'menClothes'}, p.play('browse men Clothes here'));
+//  })
+// intent('show me all the products less than thousand rupee',(p)=>{
+//     p.play({command:'costs'}, p.play('look at these'))
+//     
+//     p.play('would you like to buy some')
+//     p.then(confirmation)
+// })
