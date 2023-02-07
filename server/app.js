@@ -1,20 +1,3 @@
-/* 
-
-================== Most Important ==================
-* Issue 1 :
-In uploads folder you need create 3 folder like bellow.
-Folder structure will be like: 
-public -> uploads -> 1. products 2. customize 3. categories
-*** Now This folder will automatically create when we run the server file
-
-* Issue 2:
-For admin signup just go to the auth 
-controller then newUser obj, you will 
-find a role field. role:1 for admin signup & 
-role: 0 or by default it for customer signup.
-go user model and see the role field.
-
-*/
 
 const express = require("express");
 const app = express();
