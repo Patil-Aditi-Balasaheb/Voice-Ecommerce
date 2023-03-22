@@ -1,8 +1,9 @@
+
 export const homeState = {
   categoryListDropdown: false,
   filterListDropdown: false,
   searchDropdown: false,
-  products: null,
+  products: [],
   loading: false,
   sliderImages: [],
 };

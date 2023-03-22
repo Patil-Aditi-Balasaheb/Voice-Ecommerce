@@ -244,6 +244,7 @@ const ProductDetailsSection = (props) => {
                       layoutData.inCart.includes(sProduct._id) === false) ? (
                       <div className="flex items-center space-x-2">
                         <span
+                          id="decrease"
                           onClick={(e) =>
                             updateQuantity(
                               "decrease",
@@ -269,6 +270,7 @@ const ProductDetailsSection = (props) => {
                         </span>
                         <span className="font-semibold">{quantitiy}</span>
                         <span
+                          id="increase"
                           onClick={(e) =>
                             updateQuantity(
                               "increase",
@@ -295,7 +297,7 @@ const ProductDetailsSection = (props) => {
                       </div>
                     ) : (
                       <div className="flex items-center space-x-2">
-                        <span>
+                        <span id="quantityNotAvailable">
                           <svg
                             className="w-5 h-5 fill-current cursor-not-allowed"
                             fill="currentColor"
@@ -368,6 +370,7 @@ const ProductDetailsSection = (props) => {
                   {layoutData.inCart !== null &&
                   layoutData.inCart.includes(sProduct._id) === true ? (
                     <div
+                      id="inCart"
                       style={{ background: "#303031" }}
                       className={`px-4 py-2 text-white text-center cursor-not-allowed uppercase opacity-75`}
                     >
@@ -375,6 +378,7 @@ const ProductDetailsSection = (props) => {
                     </div>
                   ) : (
                     <div
+                      id="addToCart"
                       onClick={(e) =>
                         addToCart(
                           sProduct._id,

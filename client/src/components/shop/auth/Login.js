@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useRef, useEffect } from "react";
 import { loginReq } from "./fetchApi";
 import { LayoutContext } from "../index";
 
@@ -6,6 +6,8 @@ const Login = (props) => {
   const { data: layoutData, dispatch: layoutDispatch } = useContext(
     LayoutContext
   );
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const [data, setData] = useState({
     email: "",
@@ -14,7 +16,7 @@ const Login = (props) => {
     loading: true,
   });
 
-  const alert = (msg) => <div className="text-xs text-red-500">{msg}</div>;
+  const alert = (msg) => <div id="loginErrors" className="text-xs text-red-500">{msg}</div>;
 
   const formSubmit = async () => {
     setData({ ...data, loading: true });
@@ -40,6 +42,9 @@ const Login = (props) => {
     }
   };
 
+
+
+
   return (
     <Fragment>
       <div className="text-center text-2xl mb-6">Login</div>
@@ -58,9 +63,11 @@ const Login = (props) => {
           </label>
           <input
             onChange={(e) => {
-              setData({ ...data, email: e.target.value, error: false });
+              setData({ ...data, email: e.target.value.toLowerCase(), error: false });
               layoutDispatch({ type: "loginSignupError", payload: false });
             }}
+            autoFocus
+            ref={usernameRef}
             value={data.email}
             type="text"
             id="name"
@@ -76,9 +83,10 @@ const Login = (props) => {
           </label>
           <input
             onChange={(e) => {
-              setData({ ...data, password: e.target.value, error: false });
+              setData({ ...data, password: e.target.value.toLowerCase(), error: false });
               layoutDispatch({ type: "loginSignupError", payload: false });
             }}
+            ref={passwordRef}
             value={data.password}
             type="password"
             id="password"
@@ -99,11 +107,9 @@ const Login = (props) => {
               Remember me<span className="text-sm text-gray-600">*</span>
             </label>
           </div>
-          <a className="block text-gray-600" href="/">
-            Lost your password?
-          </a>
         </div>
         <div
+        id="loginBtn"
           onClick={(e) => formSubmit()}
           style={{ background: "#303031" }}
           className="font-medium px-4 py-2 text-white text-center cursor-pointer"

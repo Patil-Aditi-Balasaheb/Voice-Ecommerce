@@ -10,6 +10,9 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { LayoutContext } from "../index";
 import { useRef } from "react";
+import {  fireEvent } from '@testing-library/react';
+import { logout } from "../partials/Action";
+
 
 export const HomeContext = createContext();
 
@@ -20,12 +23,15 @@ const HomeComponent = () => {
   const { data: homeData, dispatch: homeDispatch } = useContext(HomeContext);
 
 
+
   useEffect(() => {
+    if(!homeData.loading || homeData.products.length === 0) return
+    
     function sendCategory() {
       alanBtnInstance.activate();
       // Calling the project API method on button click
       alanBtnInstance.callProjectApi("listCategories", {
-        categories: 'Electronics, Fashion, Home and Garden, Sports, Health and Beauty, Collectibles and Art Products',
+        categories: 'Health and Beauty, Sports , Fashion , Electronics',
       }, function (error, result) { });
     };
 
@@ -36,6 +42,57 @@ const HomeComponent = () => {
         if (commandData.command === 'showCart') {
           // Navber.cartModalOpen();
           layoutDispatch({ type: "cartModalToggle", payload: true });
+        }
+        else if (commandData.command === 'closeCart') {
+          layoutDispatch({ type: "cartModalToggle", payload: false });
+
+        }
+        else if (commandData.command === 'showProduct') {
+          // alanBtnInstance.playText(commandData.title);
+
+          console.log(homeData)
+						const foundProduct = homeData.products.find((product) => (product.pName.toLowerCase().includes(commandData.title.toLowerCase())));
+
+						if (foundProduct) {
+							history.push("/products/" + foundProduct._id);
+							alanBtnInstance.playText("Sure, Showing " + foundProduct.pName);
+						};
+
+						if (!foundProduct) alanBtnInstance.playText("product not available or incorrect product name");
+
+
+
+        }else if (commandData.command === 'TypeUsername') {
+          const usernameEle = document.getElementById("name");
+          if(!usernameEle) alanBtnInstance.playText("Please open login page first");
+          
+          fireEvent.input(usernameEle, { target: { value: commandData.title.toLowerCase() } });
+          
+          alanBtnInstance.playText("Username entered, Please enter your password next.")
+        }
+        else if (commandData.command === 'TypePassword') {
+          const passwordEle = document.getElementById("password");
+          if(!passwordEle) alanBtnInstance.playText("Please open login page first");
+
+
+          passwordEle.focus();
+          fireEvent.input(passwordEle, { target: { value: commandData.title.toLowerCase() } });
+          alanBtnInstance.playText("Password entered, initiating log in.")
+
+          document.getElementById("loginBtn").click();
+          alanBtnInstance.playText("login successful.")
+          
+          setTimeout(()=>{
+            const loginErrors = document.querySelectorAll("#loginErrors");
+
+            if(loginErrors){
+              console.log(loginErrors)
+              loginErrors.forEach((error)=>{
+                alanBtnInstance.playText("error: " + error.textContent);
+              })
+          }
+          }, 500);
+          
         }
         else if (commandData.command === "Wishlist") {
           history.push("/wish-list");
@@ -99,10 +156,48 @@ const HomeComponent = () => {
           history.push("/products/category/63521846fea69c47a46fc055");
         } else if (commandData.command === 'Login') {
           layoutDispatch({ type: "loginSignupModalToggle", payload: true });
+          alanBtnInstance.playText("Please enter your username and password.")
         }
+        else if (commandData.command === 'logout') {
+          logout();
+        }
+        else if (commandData.command === 'closeLogin') {
+          layoutDispatch({ type: "loginSignupModalToggle", payload: false });
+        }
+        else if (commandData.command === 'addToCart') {
+          const addCartBtn = document.querySelector("#addToCart");
+          const inCart = document.querySelector("#inCart");
+
+          if(!addCartBtn || inCart) alanBtnInstance("Functionality not available on this page")
+
+          addCartBtn.click();
+
+          alanBtnInstance.playText("Product added to cart.")
+        }
+
+        else if (commandData.command === 'increase') {
+          const increaseBtn = document.querySelector("#increase");
+          const quantityNotAvailable = document.querySelector("#quantityNotAvailable");
+
+          if(!increaseBtn || quantityNotAvailable) alanBtnInstance("Functionality not available on this page")
+
+          increaseBtn.click();
+          alanBtnInstance.playText("Quantity increased.")
+        }
+
+        else if (commandData.command === 'decrease') {
+          const decreaseBtn = document.querySelector("#decrease");
+          const quantityNotAvailable = document.querySelector("#quantityNotAvailable");
+
+          if(!decreaseBtn || quantityNotAvailable) alanBtnInstance("Functionality not available on this page")
+
+          decreaseBtn.click();
+          alanBtnInstance.playText("Quantity Decreased.")
+        }
+        
       }
     });
-  }, [history]);
+  }, [history, homeData.loading, homeData.products]);
 
   return (
     <Fragment>
@@ -115,6 +210,7 @@ const HomeComponent = () => {
       <section className="m-4 md:mx-8 md:my-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <SingleProduct />
       </section>
+      {/* {(!homeData.loading) && <Alan />} */}
     </Fragment>
   );
 };
