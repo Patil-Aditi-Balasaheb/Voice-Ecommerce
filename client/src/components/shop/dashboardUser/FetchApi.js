@@ -22,6 +22,7 @@ export const updatePersonalInformationFetch = async (userData) => {
 export const getOrderByUser = async (uId) => {
   try {
     let res = await axios.post(`${apiURL}/api/order/order-by-user`, { uId });
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error);

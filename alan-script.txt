@@ -1,23 +1,27 @@
-intent('hello alan', p => {
-    p.play('(Assalam|hi there)');
+intent('(Hello| Hi)', p => {
+    p.play('(Hi there ! I am Alan , your assistant who will help you to shop from this e-commerce website. How can I help you?)');
 });
 
 intent('(what|how) (do|can) you (do|help me)?', p => {
-    p.play('I listen to your commands and add or remove items from the cart');
+    p.play('I listen to your commands and help you login,navigate,search products and add items to cart');
 });
 
 intent('what (is|does) this (website|app) (about|do)?', p => {
-    p.play('This is a E-commerce website were you can shop items of your choice');
+    p.play('This is a E-commerce website were you can shop sports , electronics , health and beauty and fashion products.');
 });
 
 intent('(Go to my wishlist|open Wishlist)',(p)=>{
     p.play({command:'Wishlist'}, p.play('Opening'));
     p.play('here is your Wishlist.');
 })
-intent('(Go to login|open login page| login page)',(p)=>{
+intent('(Go to login|open login page|login| open login)',(p)=>{
     p.play({command:'Login'}, p.play('Opening Login page'));
   
 })
+
+intent('(close login page|close login)',(p)=>{
+    p.play({command:'closeLogin'}, p.play('Sure , Closing Login Page'));
+ })
 
 intent('(Go to|open|show) (my|) (account|dashboard)', (p) => {
     p.play({command: 'UserProfile'}, p.play('Opening'));
@@ -54,11 +58,6 @@ intent('(Go to|open|show) (manage|all) categories',(p)=>{
     p.play('here is the manage categories page where you can add, remove or update one.');
 })
 
-intent('(Go to|open|show) (manage|all) products',(p)=>{
-    p.play({command:'Products'}, p.play('Opening'));
-    p.play('here is the manage products page where you can add, remove or update one.');
-})
-
 intent('(Go to|open|show) (manage|all) orders',(p)=>{
     p.play({command:'Orders'}, p.play('Opening'));
     p.play('here is the manage orders page where you can update the order status.');
@@ -73,25 +72,10 @@ projectAPI.listCategories = function(p, param, callback) {
     callback();
 };
 
-intent('(what|list) (can|all|) (I|categories) (get|buy|do you have?|) (here|)', p => {
+intent('(what|list|show) (can|all|) (I|categories|products) (get|buy|do you have?|) (here|)', p => {
     p.play({command: 'ListCategories'});
 });
 
-// intent('(open|show) cart', (p) => {
-//     p.play({command: 'Cart'}, p.play('here is your Cart'));
-// })
-
-
-
-intent('(what categories do you have?|categories)', p => {
-    p.play('You can buy shoes, watches, clothes men and women ');
-});
-
-const items = "$(item__name shoe|skirt|sandal|shirt|short|pant|tvs)"
-
-intent(`(show me some|do you have) ${items}`,p=>{
-    p.play({command:"show",product:`${p.item_name.value}`},p.play( p.itemname.value==="shirt"?'see these shirts,they will look handsome on you':`look at these ${p.item_name.value}`))
-})
 intent('(Go to my wishlist|open Wishlist)',(p)=>{
     p.play({command:'Wishlist'}, p.play('here is your Wishlist'));
 })
@@ -101,8 +85,11 @@ intent('(Go to adminPanel | adminPanel)',(p)=>{
 intent('(go back to home page | let me buy something)',(p)=>{
     p.play({command:'home'}, p.play('you are in the home page'))
 })
-intent('open cart',(p)=>{
+intent('(open|show|Go to) (cart| shopping cart) (page|)',(p)=>{
     p.play({command:'showCart'}, p.play('Manage your orders'));
+ })
+intent('close cart',(p)=>{
+    p.play({command:'closeCart'}, p.play('Closing cart'));
  })
 
 
@@ -112,50 +99,71 @@ intent('(show some Electronics | Electronics) (products|)',(p)=>{
 intent('(show some Fashion | Fashion) (products|)',(p)=>{
     p.play({command:'Fashion'}, p.play('browse Fashion products here'));
  })
-intent('(show some Home and Garden | Home and Garden) (products|)',(p)=>{
-    p.play({command:'HomenGarden'}, p.play('browse Home and Garden products here'));
- })
+
 intent('(show some Sports | Sports) (products|)',(p)=>{
     p.play({command:'Sports'}, p.play('browse Sports products here'));
  })
 intent('(show some Health and Beauty | Health and Beauty) (products|)',(p)=>{
     p.play({command:'HealthnBeauty'}, p.play('browse Health and Beauty products here'));
  })
-intent('(show some Collectibles and Art | Collectibles and Art) (products|)',(p)=>{
-    p.play({command:'Collectibles'}, p.play('browse Collectibles and Art products here'));
+
+
+
+//show product
+intent("(Open | Show) $(Product* .+)", (p) => {
+    p.play({command: "showProduct", title: p.Product.value});
+})
+
+
+intent("username is $(Word* .+)", (p) => {
+    p.play({command: "TypeUsername", title: p.Word.value});
+})
+
+intent("password is $(Word* .+)", (p) => {
+    p.play({command: "TypePassword", title: p.Word.value});
+})
+
+intent("Remove $(Word* .+) from cart", (p) => {
+    p.play({command: "removeCart", title: p.Word.value});
+})
+
+intent("(logout | log out | sign out)",(p)=>{
+    p.play({command:'logout'}, p.play('Okay, logging you out. See you soon again!'));
  })
-
-
-
-
-// intent('(show some womenClothes | womenClothes)',(p)=>{
-//     p.play({command:'womenClothes'}, p.play('browse women Clothes here'));
-//  })
-// intent('(show some shoes | shoes)',(p)=>{
-//     p.play({command:'shoes'}, p.play('browse shoes here'));
-//  })
-// intent('(show some menClothes | menClothes)',(p)=>{
-//     p.play({command:'menClothes'}, p.play('browse men Clothes here'));
-//  })
 
 intent('open cart',(p)=>{
     p.play({command:'showCart'}, p.play('Manage your orders'));
  })
-// intent('show some watches',(p)=>{
-//     p.play({command:'watches'}, p.play('browse watches here'));
-//  })
-// intent('show some womenClothes',(p)=>{
-//     p.play({command:'womenClothes'}, p.play('browse women Clothes here'));
-//  })
-// intent('show some shoes',(p)=>{
-//     p.play({command:'shoes'}, p.play('browse shoes here'));
-//  })
-// intent('show some menClothes',(p)=>{
-//     p.play({command:'menClothes'}, p.play('browse men Clothes here'));
-//  })
-// intent('show me all the products less than thousand rupee',(p)=>{
-//     p.play({command:'costs'}, p.play('look at these'))
-//     
-//     p.play('would you like to buy some')
-//     p.then(confirmation)
-// })
+
+
+intent('Add to cart',(p)=>{
+    p.play({command:'addToCart'});
+ })
+
+intent('scroll up',(p)=>{
+    p.play({command:'scrollUp'});
+ })
+
+intent('scroll down',(p)=>{
+    p.play({command:'scrollDown'});
+ })
+
+intent('Increase product quantity',(p)=>{
+    p.play({command:'increase'});
+ })
+
+intent('Decrease product quantity',(p)=>{
+    p.play({command:'decrease'});
+ })
+
+intent('Tell me about this product', (p)=> {
+      p.play({command: 'describeProduct'}) 
+});
+
+intent('what is the price of this product', (p)=> {
+      p.play({command: 'readPrice'}) 
+});
+
+intent('(Add this product to wishlist | add this product to my wishlist)', (p)=> {
+      p.play({command: 'addToWishlist'}) 
+});

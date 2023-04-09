@@ -176,7 +176,10 @@ const ProductDetailsSection = (props) => {
             <div className="flex flex-col leading-8">
               <div className="text-2xl tracking-wider">{sProduct.pName}</div>
               <div className="flex justify-between items-center">
-                <span className="text-xl tracking-wider text-yellow-700">
+                <span
+                  className="text-xl tracking-wider text-yellow-700"
+                  id="productPrice"
+                >
                   Rs. {sProduct.pPrice}.00
                 </span>
                 <span>
@@ -205,6 +208,7 @@ const ProductDetailsSection = (props) => {
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
+                    id="wishlistBtn"
                   >
                     <path
                       fillRule="evenodd"
@@ -215,7 +219,7 @@ const ProductDetailsSection = (props) => {
                 </span>
               </div>
             </div>
-            <div className="my-4 md:my-6 text-gray-600">
+            <div className="my-4 md:my-6 text-gray-600" id="productDescription">
               {sProduct.pDescription}
             </div>
             <div className="my-4 md:my-6">
