@@ -69,7 +69,10 @@ export const CheckoutComponent = (props) => {
                   className="p-4 md:p-8"
                 >
                   {state.error ? (
-                    <div className="bg-red-200 py-2 px-4 rounded">
+                    <div
+                      className="bg-red-200 py-2 px-4 rounded"
+                      id={`checkoutError-${state.error ? "true" : "false"}`}
+                    >
                       {state.error}
                     </div>
                   ) : (
@@ -77,7 +80,7 @@ export const CheckoutComponent = (props) => {
                   )}
                   <div className="flex flex-col py-2">
                     <label htmlFor="address" className="pb-2">
-                      Dalivery Address
+                      Delivery Address
                     </label>
                     <input
                       value={state.address}
@@ -136,6 +139,7 @@ export const CheckoutComponent = (props) => {
                     }
                     className="w-full px-4 py-2 text-center text-white font-semibold cursor-pointer"
                     style={{ background: "#303031" }}
+                    id="payNowBtn"
                   >
                     Pay now
                   </div>

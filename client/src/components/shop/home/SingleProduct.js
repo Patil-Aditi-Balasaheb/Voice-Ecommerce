@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { getAllProduct } from "../../admin/products/FetchApi";
-import Alan from "./Alan";
 import { HomeContext } from "./index";
 import { isWishReq, unWishReq, isWish } from "./Mixins";
 
@@ -142,7 +141,6 @@ const SingleProduct = (props) => {
           No product found
         </div>
       )}
-      
     </Fragment>
   );
 };

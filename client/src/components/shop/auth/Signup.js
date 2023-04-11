@@ -13,7 +13,7 @@ const Signup = (props) => {
   });
 
   const alert = (msg, type) => (
-    <div className={`text-sm text-${type}-500`}>{msg}</div>
+    <div className={`text-sm text-${type}-500`} id="signupErrors">{msg}</div>
   );
 
   const formSubmit = async () => {
@@ -81,7 +81,7 @@ const Signup = (props) => {
             id="name"
             className={`${
               data.error.name ? "border-red-500" : ""
-            } px-4 py-2 focus:outline-none border`}
+            } px-4 py-2 focus:outline-none border signup-name`}
           />
           {!data.error ? "" : alert(data.error.name, "red")}
         </div>
@@ -125,7 +125,7 @@ const Signup = (props) => {
             id="password"
             className={`${
               data.error.password ? "border-red-500" : ""
-            } px-4 py-2 focus:outline-none border`}
+            } px-4 py-2 focus:outline-none border signup-password`}
           />
           {!data.error ? "" : alert(data.error.password, "red")}
         </div>
@@ -148,7 +148,7 @@ const Signup = (props) => {
             id="cPassword"
             className={`${
               data.error.cPassword ? "border-red-500" : ""
-            } px-4 py-2 focus:outline-none border`}
+            } px-4 py-2 focus:outline-none border signup-confirm-password`}
           />
           {!data.error ? "" : alert(data.error.cPassword, "red")}
         </div>
@@ -171,6 +171,7 @@ const Signup = (props) => {
           onClick={(e) => formSubmit()}
           style={{ background: "#303031" }}
           className="px-4 py-2 text-white text-center cursor-pointer font-medium"
+          id="signupBtn"
         >
           Create an account
         </div>

@@ -1,4 +1,4 @@
-import React, { Fragment, createContext, useReducer } from "react";
+import React, { Fragment, createContext, useReducer, useState } from "react";
 import Layout from "../layout";
 import Slider from "./Slider";
 import ProductCategory from "./ProductCategory";
@@ -8,7 +8,7 @@ import alanBtn from "@alan-ai/alan-sdk-web";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { LayoutContext } from "../index";
+import { LayoutContext, isAuthenticate } from "../index";
 import { useRef } from "react";
 import { fireEvent } from "@testing-library/react";
 import { logout } from "../partials/Action";
@@ -16,17 +16,46 @@ import { cartList, inCart } from "../productDetails/Mixins";
 import { fetchData } from "../order/Action";
 import { totalCost } from "../partials/Mixins";
 import { cartListProduct } from "../partials/FetchApi";
+import { productReducer } from "../../admin/products/ProductContext";
+import { isWish, isWishReq } from "./Mixins";
+import { DashboardUserContext } from "../dashboardUser/Layout";
+import { fetchOrderByUser } from "../dashboardUser/Action";
 
 export const HomeContext = createContext();
 
 const HomeComponent = () => {
   const categoryRef = useRef(null);
   const history = useHistory();
-  const { dispatch: layoutDispatch } = useContext(LayoutContext);
+  const { data: layoutData, dispatch: layoutDispatch } =
+    useContext(LayoutContext);
   const { data: homeData, dispatch: homeDispatch } = useContext(HomeContext);
 
+  const [wList, setWlist] = useState(
+    JSON.parse(localStorage.getItem("wishList"))
+  );
+
+  const fetchData = async () => {
+    try {
+      let responseData = await cartListProduct();
+      if (responseData && responseData.Products) {
+        layoutDispatch({ type: "cartProduct", payload: responseData.Products });
+        layoutDispatch({ type: "cartTotalCost", payload: totalCost() });
+      }
+      console.log(layoutData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    if (!homeData.loading || homeData.products.length === 0) return;
+    fetchData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!homeData.loading || homeData.products.length === 0 || !layoutDispatch)
+      return;
 
     function sendCategory() {
       alanBtnInstance.activate();
@@ -117,26 +146,32 @@ const HomeComponent = () => {
           );
         } else if (commandData.command === "TypePassword") {
           const passwordEle = document.getElementById("password");
-          if (!passwordEle)
-            alanBtnInstance.playText("Please open login page first");
+          if (!passwordEle) {
+            return;
+          }
 
           passwordEle.focus();
           fireEvent.input(passwordEle, {
-            target: { value: commandData.title.toLowerCase() },
+            target: {
+              value: commandData.title.toLowerCase().replaceAll(" ", ""),
+            },
           });
           alanBtnInstance.playText("Password entered, initiating log in.");
 
           document.getElementById("loginBtn").click();
-          alanBtnInstance.playText("login successful.");
 
           setTimeout(() => {
             const loginErrors = document.querySelectorAll("#loginErrors");
 
             if (loginErrors) {
               console.log(loginErrors);
-              loginErrors.forEach((error) => {
+              loginErrors?.forEach((error) => {
                 alanBtnInstance.playText("error: " + error.textContent);
               });
+
+              return;
+            } else {
+              alanBtnInstance.playText("login successful.");
             }
           }, 500);
         } else if (commandData.command === "Wishlist") {
@@ -194,21 +229,52 @@ const HomeComponent = () => {
           const addCartBtn = document.querySelector("#addToCart");
           const inCart = document.querySelector("#inCart");
 
-          if (!addCartBtn || inCart)
+          if (!addCartBtn || inCart) {
             alanBtnInstance("Functionality not available on this page");
-
+            return;
+          }
           addCartBtn.click();
 
           alanBtnInstance.playText("Product added to cart.");
+        } else if (commandData.command === "addToWishList") {
+          const addCartBtn = document.querySelector("#addToCart");
+          const inCart = document.querySelector("#inCart");
+
+          const isProductPage = window.location.href.includes("products");
+
+          if ((!addCartBtn || !inCart) && !isProductPage) {
+            alanBtnInstance("Functionality not available on this page");
+            return;
+          }
+
+          const productUrl = window.location.href.split("/");
+
+          const pId = productUrl[productUrl.length - 1];
+
+          if (isWish(pId, wList)) {
+            alanBtnInstance.playText("Product already in wishlist.");
+            return;
+          }
+
+          isWishReq(undefined, pId, setWlist);
+
+          alanBtnInstance.playText(
+            "Product added to wishlist. Here, have a look at your wishlist."
+          );
+
+          setTimeout(() => {
+            history.push("/wish-list");
+          }, 400);
         } else if (commandData.command === "increase") {
           const increaseBtn = document.querySelector("#increase");
           const quantityNotAvailable = document.querySelector(
             "#quantityNotAvailable"
           );
 
-          if (!increaseBtn || quantityNotAvailable)
+          if (!increaseBtn || quantityNotAvailable) {
             alanBtnInstance("Functionality not available on this page");
-
+            return;
+          }
           increaseBtn.click();
           alanBtnInstance.playText("Quantity increased.");
         } else if (commandData.command === "decrease") {
@@ -217,9 +283,10 @@ const HomeComponent = () => {
             "#quantityNotAvailable"
           );
 
-          if (!decreaseBtn || quantityNotAvailable)
+          if (!decreaseBtn || quantityNotAvailable) {
             alanBtnInstance("Functionality not available on this page");
-
+            return;
+          }
           decreaseBtn.click();
           alanBtnInstance.playText("Quantity Decreased.");
         } else if (commandData.command === "scrollDown") {
@@ -268,10 +335,230 @@ const HomeComponent = () => {
           alanBtnInstance.playText(
             "Sure! Adding this product to your wishlist."
           );
+        } else if (commandData.command === "checkout") {
+          if (layoutData.cartTotalCost) {
+            if (isAuthenticate()) {
+              history.push("/checkout");
+
+              setTimeout(() => {
+                alanBtnInstance.playText(
+                  "Please, fill out your details to proceed further."
+                );
+              }, 500);
+            } else {
+              alanBtnInstance.playText("Please, Login first.");
+            }
+          } else {
+            alanBtnInstance.playText(
+              "Your cart is empty. Please, add something in your cart.."
+            );
+          }
+        } else if (commandData.command === "address") {
+          const deliveryAddres = document.querySelector("#address");
+          if (!deliveryAddres) {
+            alanBtnInstance.playText(
+              "You're currently not on the checkout page."
+            );
+            return;
+          }
+
+          deliveryAddres.focus();
+          fireEvent.input(deliveryAddres, {
+            target: {
+              value: commandData.title.toLowerCase(),
+            },
+          });
+
+          alanBtnInstance.playText(
+            "Delivery Address Entered. Please, fill up rest of the details too."
+          );
+        } else if (commandData.command === "phone") {
+          const phone = document.querySelector("#phone");
+          if (!phone) {
+            alanBtnInstance.playText(
+              "You're currently not on the checkout page."
+            );
+            return;
+          }
+
+          // if (isNaN(commandData.title.toLowerCase())) {
+          //   alanBtnInstance.playText("Only number are allowed in this field.");
+          //   return;
+          // }
+
+          phone.focus();
+          fireEvent.input(phone, {
+            target: {
+              value: Number(
+                commandData.title.toLowerCase().replaceAll(" ", "")
+              ),
+            },
+          });
+
+          alanBtnInstance.playText(
+            "Phone number Entered. Please, fill up rest of the details too."
+          );
+        } else if (commandData.command === "payByCard") {
+          const cardContainer = document.querySelector(
+            '.braintree-option[tabindex="0"]'
+          );
+
+          if (!cardContainer) {
+            alanBtnInstance.playText(
+              "You're currently not on the checkout page."
+            );
+            return;
+          }
+
+          cardContainer.click();
+
+          alanBtnInstance.playText("Please, Enter your card details.");
+        } else if (commandData.command === "ccNumber") {
+          const ccNumber = document.querySelector("input#credit-card-number");
+          console.log(ccNumber);
+          if (!ccNumber) {
+            alanBtnInstance.playText(
+              "You're currently not on the checkout page. or you have not selected the payment method."
+            );
+            return;
+          }
+
+          if (isNaN(commandData.title.toLowerCase())) {
+            alanBtnInstance.playText("Only number are allowed in this field.");
+            return;
+          }
+
+          ccNumber.focus();
+          fireEvent.input(ccNumber, {
+            target: {
+              value: Number(commandData.title.toLowerCase()),
+            },
+          });
+
+          alanBtnInstance.playText(
+            "Credit card number Entered. Please, fill up rest of the details too."
+          );
+        } else if (commandData.command === "expiryDate") {
+          const expiryNumber = document.querySelector("#expiration");
+          if (!expiryNumber) {
+            alanBtnInstance.playText(
+              "You're currently not on the checkout page. or you have not selected the payment method."
+            );
+            return;
+          }
+
+          if (isNaN(commandData.title.toLowerCase())) {
+            alanBtnInstance.playText("Only number are allowed in this field.");
+            return;
+          }
+
+          expiryNumber.focus();
+          fireEvent.input(expiryNumber, {
+            target: {
+              value: Number(commandData.title.toLowerCase()),
+            },
+          });
+
+          alanBtnInstance.playText("Expiry Date Entered.");
+        } else if (commandData.command === "payNow") {
+          const payNow = document.querySelector("#payNowBtn");
+          if (!payNow) {
+            alanBtnInstance.playText(
+              "You're currently not on the checkout page."
+            );
+            return;
+          }
+
+          payNow.click();
+
+          const error = document.querySelector("#checkoutError-true");
+
+          if (error) {
+            alanBtnInstance.playText("Error: " + error.textContent);
+            return;
+          }
+
+          alanBtnInstance.playText("Thank you. Your order has been placed.");
+        } else if (commandData.command === "switchLogin") {
+          const switchBtn = document.querySelector("#switchLogin");
+
+          if (!switchBtn) {
+            alanBtnInstance.playText("Please open login & signup first.");
+            return;
+          }
+
+          switchBtn.click();
+
+          alanBtnInstance.playText("Switched");
+        } else if (commandData.command === "typeName") {
+          const nameEle = document.querySelector(".signup-name");
+          if (!nameEle)
+            alanBtnInstance.playText("Please open signup page first");
+
+          fireEvent.input(nameEle, {
+            target: { value: commandData.title.toLowerCase() },
+          });
+
+          alanBtnInstance.playText("Username entered.");
+        } else if (commandData.command === "typeEmail") {
+          const emailEle = document.getElementById("email");
+          if (!emailEle) {
+            alanBtnInstance.playText("Please open signup page first");
+            return;
+          }
+          fireEvent.input(emailEle, {
+            target: { value: commandData.title.toLowerCase() },
+          });
+
+          alanBtnInstance.playText("Email entered.");
+        } else if (commandData.command === "typeSignupPassword") {
+          const passwordEle = document.querySelector(".signup-password");
+          const confirmPassEle = document.querySelector(
+            ".signup-confirm-password"
+          );
+
+          if (!passwordEle || !confirmPassEle) {
+            alanBtnInstance.playText("Please open signup page first");
+            return;
+          }
+
+          passwordEle.focus();
+          fireEvent.input(passwordEle, {
+            target: {
+              value: commandData.title.toLowerCase().replaceAll(" ", ""),
+            },
+          });
+
+          confirmPassEle.focus();
+          fireEvent.input(confirmPassEle, {
+            target: {
+              value: commandData.title.toLowerCase().replaceAll(" ", ""),
+            },
+          });
+
+          alanBtnInstance.playText("Password entered, initiating sign up.");
+
+          document.getElementById("signupBtn").click();
+
+          setTimeout(() => {
+            const signupErrors = document.querySelectorAll("#signupErrors");
+
+            if (signupErrors?.length) {
+              signupErrors?.forEach((error) => {
+                alanBtnInstance.playText("error: " + error.textContent);
+              });
+
+              return;
+            } else {
+              alanBtnInstance.playText("sign up successful.");
+            }
+          }, 500);
+        } else if (commandData.command === "showOrderStaus") {
+          history.push("/user/orders");
         }
       },
     });
-  }, [history, homeData.loading, homeData.products]);
+  }, [history, homeData.loading, homeData.products, layoutData?.cartTotalCost]);
 
   return (
     <Fragment>

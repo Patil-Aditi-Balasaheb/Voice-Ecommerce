@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import Login from "./Login";
 import Signup from "./Signup";
 import { LayoutContext } from "../index";
@@ -28,7 +28,9 @@ const LoginSignup = (props) => {
     <Fragment>
       {/* Black Overlay  */}
       <div
-        onClick={(e) => loginSignupModalToggle()}
+        onClick={(e) => {
+          loginSignupModalToggle();
+        }}
         className={` ${
           data.loginSignupModal ? "" : "hidden"
         } fixed top-0 z-40 w-full h-screen bg-black opacity-50 cursor-pointer`}
@@ -50,6 +52,7 @@ const LoginSignup = (props) => {
             onClick={(e) => changeLoginSignup()}
             style={{ color: "#303031", border: "1px solid #303031" }}
             className="px-4 py-2 font-medium text-center cursor-pointer"
+            id="switchLogin"
           >
             {loginValue}
           </div>
@@ -59,6 +62,8 @@ const LoginSignup = (props) => {
               onClick={(e) => {
                 loginSignupModalToggle();
                 dispatch({ type: "loginSignupError", payload: false });
+                setLogin(true);
+                setLoginValue("Create an account");
               }}
               className="w-6 h-6 cursor-pointer"
               fill="currentColor"
