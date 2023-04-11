@@ -2,7 +2,7 @@ intent('(Hello| Hi)', p => {
     p.play('(Hi there ! I am Alan , your assistant who will help you to shop from this e-commerce website. How can I help you?)');
 });
 
-intent('(what|how) (do|can) you (do|help me)?', p => {
+intent('(what|how) (do|can) you (do|help|me)?', p => {
     p.play('I listen to your commands and help you login,navigate,search products and add items to cart');
 });
 
@@ -136,7 +136,7 @@ intent('open cart',(p)=>{
  })
 
 
-intent('Add to cart',(p)=>{
+intent('(Add to cart| add this product to cart| add this in cart| add in cart|add product to cart)',(p)=>{
     p.play({command:'addToCart'});
  })
 
@@ -148,22 +148,72 @@ intent('scroll down',(p)=>{
     p.play({command:'scrollDown'});
  })
 
-intent('Increase product quantity',(p)=>{
+intent('(Increase product quantity | Increase quantity)',(p)=>{
     p.play({command:'increase'});
  })
 
-intent('Decrease product quantity',(p)=>{
+intent('(Decrease product quantity | Decrease quantity)',(p)=>{
     p.play({command:'decrease'});
  })
 
-intent('Tell me about this product', (p)=> {
+intent('(Tell|About|Describe|Give)(me|)(about|description)(this|it|of)(product|)', (p)=> {
       p.play({command: 'describeProduct'}) 
 });
 
-intent('what is the price of this product', (p)=> {
+intent('(what|How|price|) (is|much) (the|for) (price|cost|it|this) (of|product)', (p)=> {
       p.play({command: 'readPrice'}) 
 });
 
-intent('(Add this product to wishlist | add this product to my wishlist)', (p)=> {
-      p.play({command: 'addToWishlist'}) 
+intent('(Add|) (this|to) (product|item|) (to|) (wishlist|in wishlist|to wishlist)', (p)=> {
+      p.play({command: 'addToWishList'}) 
 });
+
+intent('(checkout | check out)', (p)=> {
+      p.play({command: 'checkout'}) 
+});
+
+intent("delivery address is $(Word* .+)", (p) => {
+    p.play({command: "address", title: p.Word.value});
+})
+
+intent("phone number is $(Word* .+)", (p) => {
+    p.play({command: "phone", title: p.Word.value});
+})
+
+intent("pay by card", (p)=>{
+    p.play({command: "payByCard"})
+})
+
+
+intent("credit card number is $(Word* .+)", (p) => {
+    p.play({command: "ccNumber", title: p.Word.value});
+})
+
+intent("expiration date is $(Word* .+)", (p) => {
+    p.play({command: "expiryDate", title: p.Word.value});
+})
+
+
+intent("pay now", (p)=>{
+   p.play({command: "payNow"})
+})
+
+intent("switch login", (p)=>{
+   p.play({command: "switchLogin"})
+})
+
+intent("signup name is $(Word* .+)", (p) => {
+    p.play({command: "typeName", title: p.Word.value});
+})
+
+intent("signup email is $(Word* .+)", (p) => {
+    p.play({command: "typeEmail", title: p.Word.value});
+})
+
+intent("signup password is $(Word* .+)", (p) => {
+    p.play({command: "typeSignupPassword", title: p.Word.value});
+})
+
+intent("show order status ", (p)=>{
+   p.play({command: "showOrderStaus"})
+})
