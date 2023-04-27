@@ -14,7 +14,7 @@ import { fireEvent } from "@testing-library/react";
 import { logout } from "../partials/Action";
 import { cartList, inCart } from "../productDetails/Mixins";
 import { fetchData } from "../order/Action";
-import { totalCost } from "../partials/Mixins";
+import { quantity, totalCost } from "../partials/Mixins";
 import { cartListProduct } from "../partials/FetchApi";
 import { productReducer } from "../../admin/products/ProductContext";
 import { isWish, isWishReq } from "./Mixins";
@@ -230,7 +230,9 @@ const HomeComponent = () => {
           const inCart = document.querySelector("#inCart");
 
           if (!addCartBtn || inCart) {
-            alanBtnInstance("Functionality not available on this page");
+            alanBtnInstance.playText(
+              "Functionality not available on this page"
+            );
             return;
           }
           addCartBtn.click();
@@ -243,7 +245,9 @@ const HomeComponent = () => {
           const isProductPage = window.location.href.includes("products");
 
           if ((!addCartBtn || !inCart) && !isProductPage) {
-            alanBtnInstance("Functionality not available on this page");
+            alanBtnInstance.playText(
+              "Functionality not available on this page"
+            );
             return;
           }
 
@@ -272,11 +276,79 @@ const HomeComponent = () => {
           );
 
           if (!increaseBtn || quantityNotAvailable) {
-            alanBtnInstance("Functionality not available on this page");
+            alanBtnInstance.playCommand(
+              "Functionality not available on this page"
+            );
             return;
           }
           increaseBtn.click();
           alanBtnInstance.playText("Quantity increased.");
+        } else if (commandData.command === "increaseBy") {
+          const increaseBtn = document.querySelector("#increase");
+          const quantityNotAvailable = document.querySelector(
+            "#quantityNotAvailable"
+          );
+
+          if (!increaseBtn || quantityNotAvailable) {
+            alanBtnInstance.playText(
+              "Functionality not available on this page"
+            );
+            return;
+          }
+          const url = document.location.href.split("/");
+
+          const foundProduct = homeData.products.find((product) =>
+            product._id.toLowerCase().includes(url[url.length - 1])
+          );
+
+          const selectedQuantity = document.querySelector("#selectedQuantity");
+
+          if (
+            Number(selectedQuantity.textContent) + Number(commandData.title) >
+            foundProduct.pQuantity
+          ) {
+            alanBtnInstance.playText(
+              "Sorry! we don't have that much quantity in stock."
+            );
+            return;
+          }
+          console.log(Number(commandData.title), commandData.title);
+
+          for (let i = 0; i < Number(commandData.title); i++) {
+            setTimeout(() => increaseBtn.click(), 100);
+          }
+
+          alanBtnInstance.playText("Quantity increased.");
+        } else if (commandData.command === "decreaseBy") {
+          const decreaseBtn = document.querySelector("#decrease");
+          const quantityNotAvailable = document.querySelector(
+            "#quantityNotAvailable"
+          );
+
+          if (!decreaseBtn || quantityNotAvailable) {
+            alanBtnInstance.playText(
+              "Functionality not available on this page"
+            );
+            return;
+          }
+
+          const selectedQuantity = document.querySelector("#selectedQuantity");
+
+          if (
+            Math.abs(
+              Number(commandData.title) - Number(selectedQuantity.textContent)
+            ) < 1
+          ) {
+            alanBtnInstance.playText("Sorry! Minimum quantity is 1.");
+            return;
+          }
+          console.log(Number(commandData.title), commandData.title);
+
+          for (let i = 0; i < Number(commandData.title); i++) {
+            setTimeout(() => decreaseBtn.click(), 100);
+          }
+
+          alanBtnInstance.playText("Quantity Decreased.");
         } else if (commandData.command === "decrease") {
           const decreaseBtn = document.querySelector("#decrease");
           const quantityNotAvailable = document.querySelector(
@@ -284,7 +356,9 @@ const HomeComponent = () => {
           );
 
           if (!decreaseBtn || quantityNotAvailable) {
-            alanBtnInstance("Functionality not available on this page");
+            alanBtnInstance.playText(
+              "Functionality not available on this page"
+            );
             return;
           }
           decreaseBtn.click();

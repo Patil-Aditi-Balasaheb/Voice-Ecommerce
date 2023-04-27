@@ -272,7 +272,9 @@ const ProductDetailsSection = (props) => {
                             />
                           </svg>
                         </span>
-                        <span className="font-semibold">{quantitiy}</span>
+                        <span className="font-semibold" id="selectedQuantity">
+                          {quantitiy}
+                        </span>
                         <span
                           id="increase"
                           onClick={(e) =>
