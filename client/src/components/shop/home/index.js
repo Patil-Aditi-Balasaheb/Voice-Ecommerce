@@ -89,13 +89,19 @@ const HomeComponent = () => {
 
           if (foundProduct) {
             history.push("/products/" + foundProduct._id);
-            alanBtnInstance.playText("Sure, Showing " + foundProduct.pName);
+            alanBtnInstance.playText(
+              "Sure, Showing " +
+                foundProduct.pName +
+                ". Do you want me to read out price and description for this product?"
+            );
           }
 
-          if (!foundProduct)
+          if (!foundProduct) {
             alanBtnInstance.playText(
               "product not available or incorrect product name"
             );
+            return;
+          }
         } else if (commandData.command === "removeCart") {
           // alanBtnInstance.playText(commandData.title);
 
@@ -394,7 +400,19 @@ const HomeComponent = () => {
             return;
           }
 
-          alanBtnInstance.playText("It is of " + price.innerText + " only!");
+          alanBtnInstance.playText("price: " + price.innerText + " only!");
+        } else if (commandData.command === "readPriceDescription") {
+          const price = document.getElementById("productPrice");
+          const description = document.getElementById("productDescription");
+          if (!price || !description) {
+            alanBtnInstance.playText(
+              "Sorry! You are not viewing any product currently."
+            );
+            return;
+          }
+
+          alanBtnInstance.playText("price: " + price.innerText + " only!");
+          alanBtnInstance.playText("Description: " + description.innerText);
         } else if (commandData.command === "addToWishlist") {
           const wishlistBtn = document.getElementById("wishlistBtn");
 
