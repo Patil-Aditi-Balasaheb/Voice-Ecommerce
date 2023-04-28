@@ -28,7 +28,10 @@ const TableBody = ({ order }) => {
   return (
     <Fragment>
       <tr className="border-b">
-        <td className="w-48 hover:bg-gray-200 p-2 flex flex-col space-y-1">
+        <td
+          id="userProductName"
+          className="w-48 hover:bg-gray-200 p-2 flex flex-col space-y-1"
+        >
           {order.allProduct.map((product, i) => {
             return (
               <span className="block flex items-center space-x-2" key={i}>
@@ -37,7 +40,7 @@ const TableBody = ({ order }) => {
                   src={`${apiURL}/uploads/products/${product?.id?.pImages[0]}`}
                   alt="productImage"
                 />
-                <span>{product?.id?.pName}</span>
+                <span id="orderName">{product?.id?.pName}</span>
                 <span>{product?.quantitiy}x</span>
               </span>
             );
@@ -139,6 +142,7 @@ const OrdersComponent = () => {
                     <td
                       colSpan="8"
                       className="text-xl text-center font-semibold py-8"
+                      id="noOrdersFound"
                     >
                       No order found
                     </td>
@@ -147,7 +151,8 @@ const OrdersComponent = () => {
               </tbody>
             </table>
             <div className="text-sm text-gray-600 mt-2">
-              Total {orders && orders.length} order found
+              Total <span id="totalOrders">{orders && orders.length}</span>{" "}
+              order found
             </div>
           </div>
         </div>

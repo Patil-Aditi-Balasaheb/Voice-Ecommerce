@@ -20,12 +20,21 @@ import { productReducer } from "../../admin/products/ProductContext";
 import { isWish, isWishReq } from "./Mixins";
 import { DashboardUserContext } from "../dashboardUser/Layout";
 import { fetchOrderByUser } from "../dashboardUser/Action";
+import {
+  dashboardUserReducer,
+  dashboardUserState,
+} from "../dashboardUser/DashboardUserContext";
 
 export const HomeContext = createContext();
 
 const HomeComponent = () => {
   const categoryRef = useRef(null);
   const history = useHistory();
+
+  const [dashboardData, dashboardDispatch] = useReducer(
+    dashboardUserReducer,
+    dashboardUserState
+  );
   const { data: layoutData, dispatch: layoutDispatch } =
     useContext(LayoutContext);
   const { data: homeData, dispatch: homeDispatch } = useContext(HomeContext);
@@ -49,12 +58,17 @@ const HomeComponent = () => {
 
   useEffect(() => {
     fetchData();
+    fetchOrderByUser(dashboardDispatch);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!homeData.loading || homeData.products.length === 0 || !layoutDispatch)
+    if (
+      !homeData?.loading ||
+      homeData?.products?.length === 0 ||
+      !layoutDispatch
+    )
       return;
 
     function sendCategory() {
@@ -77,9 +91,9 @@ const HomeComponent = () => {
           // Navber.cartModalOpen();
           layoutDispatch({ type: "cartModalToggle", payload: true });
         } else if (commandData.command === "readOutCart") {
-          if (layoutData.cartProduct.length) {
+          if (layoutData.cartProduct?.length) {
             let cartReadText = `In your cart you have `;
-            layoutData.cartProduct.forEach((product) => {
+            layoutData.cartProduct?.forEach((product) => {
               cartReadText += ` ${quantity(product._id)} ${product.pName}`;
             });
 
@@ -680,6 +694,28 @@ const HomeComponent = () => {
           }, 500);
         } else if (commandData.command === "showOrderStaus") {
           history.push("/user/orders");
+        } else if (commandData.command === "readOrderStatus") {
+          const allProducts = document.querySelectorAll("#userProductName");
+
+          if (allProducts.length === 0) {
+            alanBtnInstance.playText("You don't any orders currently.");
+            return;
+          }
+
+          const totalOrders = document.querySelector("#totalOrders");
+
+          let readOutText = `You have ${totalOrders.textContent} orders. `;
+
+          allProducts.forEach((product) => {
+            readOutText += " Your status for order containing ";
+            product.children.forEach((child) => {
+              readOutText += child.children[1].textContent + ", ";
+            });
+
+            readOutText += product.parentNode.children[1].textContent;
+          });
+
+          alanBtnInstance.playText(readOutText);
         }
       },
     });
@@ -703,11 +739,19 @@ const HomeComponent = () => {
 
 const Home = (props) => {
   const [data, dispatch] = useReducer(homeReducer, homeState);
+  const [dashboardData, dashboardDispatch] = useReducer(
+    dashboardUserReducer,
+    dashboardUserState
+  );
   return (
     <Fragment>
-      <HomeContext.Provider value={{ data, dispatch }}>
-        <Layout children={<HomeComponent />} />
-      </HomeContext.Provider>
+      <DashboardUserContext.Provider
+        value={{ dashboardData, dashboardDispatch }}
+      >
+        <HomeContext.Provider value={{ data, dispatch }}>
+          <Layout children={<HomeComponent />} />
+        </HomeContext.Provider>
+      </DashboardUserContext.Provider>
     </Fragment>
   );
 };
