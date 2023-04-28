@@ -108,8 +108,10 @@ const FilterList = () => {
         <div className="flex justify-between items-center">
           <div className="flex flex-col space-y-2  w-2/3 lg:w-2/4">
             <label htmlFor="points" className="text-sm">
-              Price (between 0 and 10$):{" "}
-              <span className="font-semibold text-yellow-700">{range}.00$</span>{" "}
+              Price (between 0 and 1,00,000Rs):{" "}
+              <span className="font-semibold text-yellow-700">
+                {range}.00Rs
+              </span>{" "}
             </label>
             <input
               value={range}
@@ -117,7 +119,7 @@ const FilterList = () => {
               type="range"
               id="points"
               min="0"
-              max="1000"
+              max="100000"
               step="10"
               onChange={(e) => rangeHandle(e)}
             />
