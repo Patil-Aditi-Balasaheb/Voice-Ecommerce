@@ -450,7 +450,7 @@ const HomeComponent = () => {
             "Sure! Adding this product to your wishlist."
           );
         } else if (commandData.command === "checkout") {
-          if (layoutData.cartTotalCost) {
+          if (JSON.parse(localStorage.getItem("cart").length)) {
             if (isAuthenticate()) {
               history.push("/checkout");
 
