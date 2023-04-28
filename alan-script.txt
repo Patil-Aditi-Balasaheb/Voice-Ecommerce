@@ -162,14 +162,18 @@ intent('(Increase product quantity | Increase quantity)',(p)=>{
     p.play({command:'increase'});
  })
 
+<<<<<<< HEAD
 intent('Increase product quantity by $(Word* .+)',(p)=>{
      p.play({command: "increaseBy", title: p.Word.value});
  })
 
+=======
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
 intent('(Decrease product quantity | Decrease quantity)',(p)=>{
     p.play({command:'decrease'});
  })
 
+<<<<<<< HEAD
 intent('Decrease product quantity by $(Word* .+)',(p)=>{
      p.play({command: "decreaseBy", title: p.Word.value});
  })
@@ -179,6 +183,13 @@ intent('(Tell|About|Describe|Give|What)(is|me|)(about|description)(the|this|it|o
 });
 
 intent('(price|what|How|) (is|much) (the|for) (price|cost|it|this) (of|product)', (p)=> {
+=======
+intent('(Tell|About|Describe|Give)(me|)(about|description)(this|it|of)(product|)', (p)=> {
+      p.play({command: 'describeProduct'}) 
+});
+
+intent('(what|How|price|) (is|much) (the|for) (price|cost|it|this) (of|product)', (p)=> {
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
       p.play({command: 'readPrice'}) 
 });
 
@@ -198,7 +209,11 @@ intent("phone number is $(Word* .+)", (p) => {
     p.play({command: "phone", title: p.Word.value});
 })
 
+<<<<<<< HEAD
 intent("(pay by card | pay using card)", (p)=>{
+=======
+intent("pay by card", (p)=>{
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
     p.play({command: "payByCard"})
 })
 
@@ -235,6 +250,7 @@ intent("signup password is $(Word* .+)", (p) => {
 intent("show order status ", (p)=>{
    p.play({command: "showOrderStaus"})
 })
+<<<<<<< HEAD
 
 // intent("ask for price confirmation", (p)=>{
 //     p.play("Do you want me to read out price and description for this product?");
@@ -250,3 +266,5 @@ let confirmReadOut = context(()=>{
        p.play("okay, let me know if I can do something else for you.")
     })
 }) 
+=======
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
