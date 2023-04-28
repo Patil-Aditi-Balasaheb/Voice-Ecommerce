@@ -7,7 +7,7 @@ intent('(what|how) (do|can) you (do|help|me)?', p => {
 });
 
 intent('what (is|does) this (website|app) (about|do)?', p => {
-    p.play('This is a E-commerce website were you can shop sports , electronics , health and beauty and fashion products.');
+    p.play('This is a E-commerce website were you can shop sports , electronics , health and beauty and fashion products.To know more about this website you can check our FAQ Page. Say, Go to FAQ Page  , if u want to check it out.');
 });
 
 intent('(Go to my wishlist|open Wishlist)',(p)=>{
