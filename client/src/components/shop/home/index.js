@@ -164,10 +164,7 @@ const HomeComponent = () => {
           } else {
             alanBtnInstance.playText("Sorry! That is not in your cart yet.");
           }
-        }
-
-    
-        else if (commandData.command === "TypeUsername") {
+        } else if (commandData.command === "TypeUsername") {
           const usernameEle = document.getElementById("name");
           if (!usernameEle)
             alanBtnInstance.playText("Please open login page first");
@@ -184,7 +181,7 @@ const HomeComponent = () => {
           if (!passwordEle) {
             return;
           }
-          
+
           passwordEle.focus();
           fireEvent.input(passwordEle, {
             target: {
@@ -673,27 +670,33 @@ const HomeComponent = () => {
         } else if (commandData.command === "showOrderStaus") {
           history.push("/user/orders");
         } else if (commandData.command === "readOrderStatus") {
-          const allProducts = document.querySelectorAll("#userProductName");
+          setTimeout(() => {
+            const allProducts = document.querySelectorAll("#userProductName");
+            console.log(allProducts);
 
-          if (allProducts.length === 0) {
-            alanBtnInstance.playText("You don't any orders currently.");
-            return;
-          }
+            if (allProducts.length === 0) {
+              alanBtnInstance.playText("You don't any orders currently.");
+              return;
+            }
 
-          const totalOrders = document.querySelector("#totalOrders");
+            const totalOrders = document.querySelector("#totalOrders");
 
-          let readOutText = `You have ${totalOrders.textContent} orders. `;
+            let readOutText = `You have ${totalOrders.textContent} orders. `;
 
-          allProducts.forEach((product) => {
-            readOutText += " Your status for order containing ";
-            product.children.forEach((child) => {
-              readOutText += child.children[1].textContent + ", ";
+            allProducts.forEach((product) => {
+              readOutText += " Your status for order containing ";
+              [...product.children].forEach((child) => {
+                readOutText += child.children[1].textContent + " ";
+              });
+
+              readOutText += " is ";
+
+              readOutText +=
+                product.parentNode.children[1].textContent + ".      ";
             });
 
-            readOutText += product.parentNode.children[1].textContent;
-          });
-
-          alanBtnInstance.playText(readOutText);
+            alanBtnInstance.playText(readOutText);
+          }, 1000);
         }
       },
     });
