@@ -7,7 +7,7 @@ intent('(what|how) (do|can) you (do|help|me)?', p => {
 });
 
 intent('what (is|does) this (website|app) (about|do)?', p => {
-    p.play('This is a E-commerce website were you can shop sports , electronics , health and beauty and fashion products.');
+    p.play('This is a E-commerce website were you can shop sports , electronics , health and beauty and fashion products.To know more about this website you can check our FAQ Page. Say, Go to FAQ Page  , if u want to check it out.');
 });
 
 intent('(Go to my wishlist|open Wishlist)',(p)=>{
@@ -43,9 +43,9 @@ intent('(Go to|open|show|Go back to) (home|shop) (page|)', (p) => {
     p.play('here is your Home page where you can shop.');
 })
 
-intent('(Go to|open|show|Go back to) (contact us|contact) (page|)', (p) => {
-    p.play({command: 'ContactUs'}, p.play('Opening'));
-    p.play('here is Contact us.');
+intent('(Go to|open|show|Go back to) (FAQ) (page)', (p) => {
+    p.play({command: 'FAQ'}, p.play('Opening'));
+    p.play('Here is our FAQ page.');
 })
 
 intent('(Go to|open) admin (panel|dashboard)',(p)=>{
@@ -93,25 +93,26 @@ intent('close cart',(p)=>{
  })
 
 
-intent('(show some Electronics | Electronics) (products|)',(p)=>{
+intent('(show| open | Display | Get) (some|all|) (Electronics|) (products|)',(p)=>{
     p.play({command:'Electronics'}, p.play('browse Electronics here'));
  })
-intent('(show some Fashion | Fashion) (products|)',(p)=>{
+intent('(show| open | Display | Get) (some|all|) (Fashion|) (products|)',(p)=>{
     p.play({command:'Fashion'}, p.play('browse Fashion products here'));
  })
 
-intent('(show some Sports | Sports) (products|)',(p)=>{
+intent('(show| open | Display | Get) (some|all|) (Sports|) (products|)',(p)=>{
     p.play({command:'Sports'}, p.play('browse Sports products here'));
  })
-intent('(show some Health and Beauty | Health and Beauty) (products|)',(p)=>{
+intent('(show| open | Display | Get) (some|all|) (Health and Beauty|) (products|)',(p)=>{
     p.play({command:'HealthnBeauty'}, p.play('browse Health and Beauty products here'));
  })
 
 
 
 //show product
-intent("(Open | Show) $(Product* .+)", (p) => {
+intent("(Open | Show | Search | Get | Show me | Get me ) $(Product* .+)", (p) => {
     p.play({command: "showProduct", title: p.Product.value});
+    p.then(confirmReadOut);
 })
 
 
@@ -123,8 +124,17 @@ intent("password is $(Word* .+)", (p) => {
     p.play({command: "TypePassword", title: p.Word.value});
 })
 
-intent("Remove $(Word* .+) from cart", (p) => {
+intent("(I don't want to buy | Remove) $(Word* .+) ( |from cart)", (p) => {
+    if (p.Word.value === "all") {
+        p.play({command: "removeAll"});
+    } else {
     p.play({command: "removeCart", title: p.Word.value});
+    }
+})
+
+intent("Empty cart", (p) => {
+    p.play({command: "removeAll"});
+    p.play('removing');
 })
 
 intent("(logout | log out | sign out)",(p)=>{
@@ -152,15 +162,34 @@ intent('(Increase product quantity | Increase quantity)',(p)=>{
     p.play({command:'increase'});
  })
 
+<<<<<<< HEAD
+intent('Increase product quantity by $(Word* .+)',(p)=>{
+     p.play({command: "increaseBy", title: p.Word.value});
+ })
+
+=======
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
 intent('(Decrease product quantity | Decrease quantity)',(p)=>{
     p.play({command:'decrease'});
  })
 
+<<<<<<< HEAD
+intent('Decrease product quantity by $(Word* .+)',(p)=>{
+     p.play({command: "decreaseBy", title: p.Word.value});
+ })
+
+intent('(Tell|About|Describe|Give|What)(is|me|)(about|description)(the|this|it|of)(product|)', (p)=> {
+      p.play({command: 'describeProduct'}) 
+});
+
+intent('(price|what|How|) (is|much) (the|for) (price|cost|it|this) (of|product)', (p)=> {
+=======
 intent('(Tell|About|Describe|Give)(me|)(about|description)(this|it|of)(product|)', (p)=> {
       p.play({command: 'describeProduct'}) 
 });
 
 intent('(what|How|price|) (is|much) (the|for) (price|cost|it|this) (of|product)', (p)=> {
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
       p.play({command: 'readPrice'}) 
 });
 
@@ -180,7 +209,11 @@ intent("phone number is $(Word* .+)", (p) => {
     p.play({command: "phone", title: p.Word.value});
 })
 
+<<<<<<< HEAD
+intent("(pay by card | pay using card)", (p)=>{
+=======
 intent("pay by card", (p)=>{
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5
     p.play({command: "payByCard"})
 })
 
@@ -217,3 +250,21 @@ intent("signup password is $(Word* .+)", (p) => {
 intent("show order status ", (p)=>{
    p.play({command: "showOrderStaus"})
 })
+<<<<<<< HEAD
+
+// intent("ask for price confirmation", (p)=>{
+//     p.play("Do you want me to read out price and description for this product?");
+//     
+// })
+
+let confirmReadOut = context(()=>{
+    intent("yes", (p)=>{
+       p.play({command: "readPriceDescription"})
+    })
+    
+    intent("no", (p)=>{
+       p.play("okay, let me know if I can do something else for you.")
+    })
+}) 
+=======
+>>>>>>> 98053ff22df67fa21c1696cac23faef9867a7bd5

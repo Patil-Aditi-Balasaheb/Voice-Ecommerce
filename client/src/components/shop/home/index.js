@@ -122,10 +122,10 @@ const HomeComponent = () => {
               .includes(commandData.title.toLowerCase())
           );
 
-          if (!foundProduct)
-            alanBtnInstance.playText(
-              "product not available or incorrect product name"
-            );
+          // if (!foundProduct)
+          //   alanBtnInstance.playText(
+          //     "product not available or incorrect product name"
+          //   );
 
           if (inCart(foundProduct._id)) {
             const id = foundProduct._id;
@@ -134,6 +134,7 @@ const HomeComponent = () => {
               : [];
             if (cart.length !== 0) {
               cart = cart.filter((item) => item.id !== id);
+              console.log(cart);
               localStorage.setItem("cart", JSON.stringify(cart));
               fetchData(cartListProduct, layoutDispatch);
               layoutDispatch({ type: "inCart", payload: cartList() });
@@ -149,7 +150,32 @@ const HomeComponent = () => {
           } else {
             alanBtnInstance.playText("Sorry! That is not in your cart yet.");
           }
-        } else if (commandData.command === "TypeUsername") {
+        }
+
+        // remove all
+        // else if (commandData.command === "removeAll") {
+        //   let cart = localStorage.getItem("cart")
+        //     ? JSON.parse(localStorage.getItem("cart"))
+        //     : [];
+        //   if (cart.length !== 0) {
+        //     cart = cart.map((item) => item.id);
+        //     console.log(cart);
+        //     localStorage.setItem("cart", JSON.stringify(cart));
+        //     fetchData(cartListProduct, layoutDispatch);
+        //     layoutDispatch({ type: "inCart", payload: cartList() });
+        //     layoutDispatch({ type: "cartTotalCost", payload: totalCost() });
+        //     alanBtnInstance.playText("Sure! Product removed from your cart.");
+        //   }
+        //   if (cart.length === 0) {
+        //     layoutDispatch({ type: "cartProduct", payload: null });
+        //     fetchData(cartListProduct, layoutDispatch);
+        //     layoutDispatch({ type: "inCart", payload: cartList() });
+        //     alanBtnInstance.playText(
+        //       "Sorry! There is no product in your cart yet."
+        //     );
+        //   }
+        // }
+        else if (commandData.command === "TypeUsername") {
           const usernameEle = document.getElementById("name");
           if (!usernameEle)
             alanBtnInstance.playText("Please open login page first");
@@ -201,7 +227,7 @@ const HomeComponent = () => {
           history.push("/user/setting");
         } else if (commandData.command === "Home") {
           history.push("/");
-        } else if (commandData.command === "ContactUs") {
+        } else if (commandData.command === "FAQ") {
           history.push("/contact-us");
         } else if (commandData.command === "DashboardAdmin") {
           history.push("/admin/dashboard");
@@ -227,14 +253,10 @@ const HomeComponent = () => {
           history.push("/products/category/634b130eb5966b04d490e0a5");
         } else if (commandData.command === "Fashion") {
           history.push("/products/category/634b149ab5966b04d490e0c8");
-        } else if (commandData.command === "HomenGarden") {
-          history.push("/products/category/634b15d2b5966b04d490e0cc");
         } else if (commandData.command === "Sports") {
           history.push("/products/category/635216b8fea69c47a46fc014");
         } else if (commandData.command === "HealthnBeauty") {
           history.push("/products/category/6352175afea69c47a46fc02f");
-        } else if (commandData.command === "Collectibles") {
-          history.push("/products/category/63521846fea69c47a46fc055");
         } else if (commandData.command === "Login") {
           layoutDispatch({ type: "loginSignupModalToggle", payload: true });
           alanBtnInstance.playText("Please enter your username and password.");

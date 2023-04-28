@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  width: 100%;
+  padding-top: 15vh;
+  justify-content: center;
+}
+.faq {
+  max-width: 70vw;
+}

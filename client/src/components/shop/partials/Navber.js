@@ -44,7 +44,7 @@ const Navber = (props) => {
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
               onClick={(e) => history.push("/contact-us")}
             >
-              Contact us
+              FAQ
             </span>
           </div>
           <div className="col-span-2 lg:hidden flex justify-items-stretch	 items-center">
@@ -86,10 +86,11 @@ const Navber = (props) => {
               title="Wishlist"
             >
               <svg
-                className={`${location.pathname === "/wish-list"
+                className={`${
+                  location.pathname === "/wish-list"
                     ? "fill-current text-gray-800"
                     : ""
-                  } w-8 h-8 text-gray-600 cursor-pointer`}
+                } w-8 h-8 text-gray-600 cursor-pointer`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
