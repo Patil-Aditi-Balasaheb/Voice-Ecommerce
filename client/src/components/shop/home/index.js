@@ -101,12 +101,16 @@ const HomeComponent = () => {
         } else if (commandData.command === "readOutCart") {
           fetchData().then((products) => {
             if (products.length) {
+              let cartTotal = 0;
               let cartReadText = `In your cart you have `;
               products.forEach((product) => {
                 cartReadText += ` ${quantity(product._id)} ${product.pName}`;
+                cartTotal += product.pPrice * quantity(product._id);
               });
 
-              alanBtnInstance.playText(cartReadText);
+              alanBtnInstance.playText(
+                `Your cart total is ${cartTotal} rupees. ${cartReadText}`
+              );
             } else {
               alanBtnInstance.playText("Your cart is empty");
             }
