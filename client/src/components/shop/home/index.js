@@ -44,16 +44,24 @@ const HomeComponent = () => {
   );
 
   const fetchData = async () => {
-    try {
-      let responseData = await cartListProduct();
-      if (responseData && responseData.Products) {
-        layoutDispatch({ type: "cartProduct", payload: responseData.Products });
-        layoutDispatch({ type: "cartTotalCost", payload: totalCost() });
+    return new Promise(async (resolve, reject) => {
+      try {
+        let responseData = await cartListProduct();
+        console.log(responseData);
+        if (responseData && responseData.Products) {
+          layoutDispatch({
+            type: "cartProduct",
+            payload: responseData.Products,
+          });
+          layoutDispatch({ type: "cartTotalCost", payload: totalCost() });
+        }
+        console.log(layoutData);
+        resolve(responseData.Products);
+      } catch (error) {
+        console.log(error);
+        reject();
       }
-      console.log(layoutData);
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
   useEffect(() => {
@@ -91,16 +99,18 @@ const HomeComponent = () => {
           // Navber.cartModalOpen();
           layoutDispatch({ type: "cartModalToggle", payload: true });
         } else if (commandData.command === "readOutCart") {
-          if (layoutData.cartProduct?.length) {
-            let cartReadText = `In your cart you have `;
-            layoutData.cartProduct?.forEach((product) => {
-              cartReadText += ` ${quantity(product._id)} ${product.pName}`;
-            });
+          fetchData().then((products) => {
+            if (products.length) {
+              let cartReadText = `In your cart you have `;
+              products.forEach((product) => {
+                cartReadText += ` ${quantity(product._id)} ${product.pName}`;
+              });
 
-            alanBtnInstance.playText(cartReadText);
-          } else {
-            alanBtnInstance.playText("Your cart is empty");
-          }
+              alanBtnInstance.playText(cartReadText);
+            } else {
+              alanBtnInstance.playText("Your cart is empty");
+            }
+          });
         } else if (commandData.command === "closeCart") {
           layoutDispatch({ type: "cartModalToggle", payload: false });
         } else if (commandData.command === "showProduct") {
