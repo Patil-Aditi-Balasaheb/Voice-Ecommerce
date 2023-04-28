@@ -55,7 +55,7 @@ const data = {
     {
       title: "Want to search products by category?",
       content: `You could speak in few ways:<br>
-      1. "Show some [category-name] products"<br>
+      1. "Show [category-name] products"<br>
       2. "Show [category-name]"<br><br>
       Eg. "Show Electronics" or "Show Health and Beauty products" etc.`,
     },

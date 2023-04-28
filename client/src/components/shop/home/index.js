@@ -685,7 +685,7 @@ const HomeComponent = () => {
             console.log(allProducts);
 
             if (allProducts.length === 0) {
-              alanBtnInstance.playText("You don't any orders currently.");
+              alanBtnInstance.playText("You don't have any orders currently.");
               return;
             }
 
