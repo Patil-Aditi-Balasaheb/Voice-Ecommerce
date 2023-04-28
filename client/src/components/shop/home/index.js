@@ -505,10 +505,17 @@ const HomeComponent = () => {
             return;
           }
 
-          // if (isNaN(commandData.title.toLowerCase())) {
-          //   alanBtnInstance.playText("Only number are allowed in this field.");
-          //   return;
-          // }
+          if (
+            isNaN(
+              commandData.title
+                .toLowerCase()
+                .replaceAll(" ", "")
+                .replaceAll("-", "")
+            )
+          ) {
+            alanBtnInstance.playText("Only number are allowed in this field.");
+            return;
+          }
 
           phone.focus();
           fireEvent.input(phone, {
