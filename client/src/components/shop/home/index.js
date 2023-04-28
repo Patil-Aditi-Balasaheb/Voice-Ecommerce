@@ -76,6 +76,17 @@ const HomeComponent = () => {
         if (commandData.command === "showCart") {
           // Navber.cartModalOpen();
           layoutDispatch({ type: "cartModalToggle", payload: true });
+        } else if (commandData.command === "readOutCart") {
+          if (layoutData.cartProduct.length) {
+            let cartReadText = `In your cart you have `;
+            layoutData.cartProduct.forEach((product) => {
+              cartReadText += ` ${quantity(product._id)} ${product.pName}`;
+            });
+
+            alanBtnInstance.playText(cartReadText);
+          } else {
+            alanBtnInstance.playText("Your cart is empty");
+          }
         } else if (commandData.command === "closeCart") {
           layoutDispatch({ type: "cartModalToggle", payload: false });
         } else if (commandData.command === "showProduct") {
