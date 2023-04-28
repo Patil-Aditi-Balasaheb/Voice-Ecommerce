@@ -142,29 +142,7 @@ const HomeComponent = () => {
           }
         }
 
-        // remove all
-        // else if (commandData.command === "removeAll") {
-        //   let cart = localStorage.getItem("cart")
-        //     ? JSON.parse(localStorage.getItem("cart"))
-        //     : [];
-        //   if (cart.length !== 0) {
-        //     cart = cart.map((item) => item.id);
-        //     console.log(cart);
-        //     localStorage.setItem("cart", JSON.stringify(cart));
-        //     fetchData(cartListProduct, layoutDispatch);
-        //     layoutDispatch({ type: "inCart", payload: cartList() });
-        //     layoutDispatch({ type: "cartTotalCost", payload: totalCost() });
-        //     alanBtnInstance.playText("Sure! Product removed from your cart.");
-        //   }
-        //   if (cart.length === 0) {
-        //     layoutDispatch({ type: "cartProduct", payload: null });
-        //     fetchData(cartListProduct, layoutDispatch);
-        //     layoutDispatch({ type: "inCart", payload: cartList() });
-        //     alanBtnInstance.playText(
-        //       "Sorry! There is no product in your cart yet."
-        //     );
-        //   }
-        // }
+    
         else if (commandData.command === "TypeUsername") {
           const usernameEle = document.getElementById("name");
           if (!usernameEle)
@@ -182,7 +160,7 @@ const HomeComponent = () => {
           if (!passwordEle) {
             return;
           }
-
+          
           passwordEle.focus();
           fireEvent.input(passwordEle, {
             target: {
@@ -660,7 +638,7 @@ const HomeComponent = () => {
 
             if (signupErrors?.length) {
               signupErrors?.forEach((error) => {
-                alanBtnInstance.playText("error: " + error.textContent);
+                alanBtnInstance.playText(error.textContent);
               });
 
               return;
