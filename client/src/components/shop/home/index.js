@@ -514,7 +514,10 @@ const HomeComponent = () => {
           fireEvent.input(phone, {
             target: {
               value: Number(
-                commandData.title.toLowerCase().replaceAll(" ", "")
+                commandData.title
+                  .toLowerCase()
+                  .replaceAll(" ", "")
+                  .replaceAll("-", "")
               ),
             },
           });
